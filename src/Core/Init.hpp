@@ -202,7 +202,12 @@ namespace BloodPoolCore
 			if (!tes) return false;
 
 			auto* cell = tes->interiorCell;
-			if (cell && cell->IsAttached()) {
+			if (auto* ref = MiscUtils::GetValidReference(MiscUtils::ResolveHandle(p.refHandle), true)) {
+				cell = ref->GetParentCell();
+				if (!cell || !cell->IsAttached()) return false;
+			}
+
+			if (cell && cell->IsAttached() && cell->IsInteriorCell()) {
 				p.cell = cell;
 				return true;
 			}
